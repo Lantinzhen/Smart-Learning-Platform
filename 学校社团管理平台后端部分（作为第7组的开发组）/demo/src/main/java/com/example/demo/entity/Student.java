@@ -1,30 +1,32 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import java.util.Date;
 
-@Data
+import java.time.LocalDateTime;
+
+/**
+ * 学生实体类
+ */
 @Entity
 @Table(name = "students")
+@Data
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "student_id", nullable = false, unique = true, length = 20)
+    @Column(name = "student_id", length = 20)
     private String studentId;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
-    private Gender gender;
+    @Column(name = "password", length = 255, nullable = false)
+    private String password;
 
-    @Column(name = "birth_date")
-    private Date birthDate;
+    @Column(name = "email", length = 100, unique = true)
+    private String email;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
 
     @Column(name = "major", length = 100)
     private String major;
@@ -32,26 +34,32 @@ public class Student {
     @Column(name = "grade", length = 20)
     private String grade;
 
-    @Column(name = "class_name", length = 50)
-    private String className;
+    @Column(name = "enrollment_year")
+    private Integer enrollmentYear;
 
-    @Column(name = "bio", columnDefinition = "TEXT")
-    private String bio;
+    @Column(name = "gender", length = 10)
+    private String gender;
 
     @Column(name = "avatar_url", length = 255)
     private String avatarUrl;
 
-    @Column(name = "total_points")
-    private Integer totalPoints = 0;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    // 外键关联用户表
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    @JsonIgnoreProperties({"password", "roles", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"})
-    private User user;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
-    // 枚举定义
-    public enum Gender {
-        MALE, FEMALE, OTHER
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

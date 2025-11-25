@@ -1,77 +1,81 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import java.time.LocalDateTime;
-import com.example.demo.entity.ClubAdmin;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
 
+/**
+ * 社团申请表实体类
+ */
 @Data
 @Entity
 @Table(name = "club_applications")
 public class ClubApplication {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "application_id")
+    private Integer applicationId;
 
-    @Column(name = "application_reason", columnDefinition = "TEXT", nullable = false)
-    private String applicationReason;
+    @Column(name = "student_id", nullable = false)
+    private String studentId;
 
-    @Column(name = "relevant_experience", columnDefinition = "TEXT")
-    private String relevantExperience;
+    @Column(name = "club_id", nullable = false)
+    private Integer clubId;
 
-    @Column(name = "expected_activity_types", columnDefinition = "TEXT")
-    private String expectedActivityTypes;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "major")
+    private String major;
+
+    @Column(name = "grade")
+    private String grade;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "reason", columnDefinition = "TEXT")
+    private String reason;
+
+    @Column(name = "experience", columnDefinition = "TEXT")
+    private String experience;
+
+    @Column(name = "activity_preference", columnDefinition = "TEXT")
+    private String activityPreference;
 
     @Column(name = "available_time", columnDefinition = "TEXT")
     private String availableTime;
 
-    @Column(name = "portfolio_url", length = 255)
-    private String portfolioUrl;
+    @Column(name = "portfolio")
+    private String portfolio;
 
-    @Column(name = "contact_phone", length = 20)
-    private String contactPhone;
-
-    @Column(name = "contact_email", length = 100)
-    private String contactEmail;
-
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ApplicationStatus status = ApplicationStatus.PENDING;
+    private ApplicationStatus status;
 
-    @Column(name = "applied_at", nullable = false)
-    private LocalDateTime appliedAt;
+    @Column(name = "reviewed_by")
+    private String reviewedBy;
 
-    @Column(name = "processed_at")
-    private LocalDateTime processedAt;
+    @Column(name = "reviewed_at")
+    private Timestamp reviewedAt;
 
-    @Column(name = "processed_note", columnDefinition = "TEXT")
-    private String processedNote;
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
-    // 外键关联
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id", nullable = false)
-    @JsonIgnoreProperties({"activities", "clubAdminAssignments", "studentClubMemberships", "clubApplications"})
-    private Club club;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", nullable = false)
-    @JsonIgnoreProperties({"user"})
+    // 关联关系
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id", insertable = false, updatable = false)
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "processed_by")
-    @JsonIgnoreProperties({"clubAdminAssignments"})
-    private ClubAdmin processedBy;
+    @ManyToOne
+    @JoinColumn(name = "club_id", referencedColumnName = "club_id", insertable = false, updatable = false)
+    private Club club;
 
-    // 枚举定义
-    public enum ApplicationStatus {
-        PENDING, APPROVED, REJECTED, CANCELLED
-    }
-
-    // 生命周期回调
-    @PrePersist
-    protected void onCreate() {
-        appliedAt = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "reviewed_by", referencedColumnName = "admin_id", insertable = false, updatable = false)
+    private ClubAdmin reviewedByAdmin;
 }

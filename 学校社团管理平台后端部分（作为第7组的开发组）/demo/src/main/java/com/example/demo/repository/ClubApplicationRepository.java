@@ -1,17 +1,39 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.ClubApplication;
-import com.example.demo.entity.Student;
-import com.example.demo.entity.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-public interface ClubApplicationRepository extends JpaRepository<ClubApplication, Long> {
-    Optional<ClubApplication> findByStudentAndClub(Student student, Club club);
-    List<ClubApplication> findByStudent(Student student);
-    List<ClubApplication> findByClub(Club club);
-    List<ClubApplication> findByStatus(ClubApplication.ApplicationStatus status);
-    List<ClubApplication> findByClubAndStatus(Club club, ClubApplication.ApplicationStatus status);
-    List<ClubApplication> findByStudentAndStatus(Student student, ClubApplication.ApplicationStatus status);
+import java.util.List;
+
+/**
+ * 社团申请Repository接口
+ */
+@Repository
+public interface ClubApplicationRepository extends JpaRepository<ClubApplication, Integer> {
+
+    /**
+     * 根据学生ID查询申请记录
+     */
+    List<ClubApplication> findByStudentId(String studentId);
+
+    /**
+     * 根据社团ID查询申请记录
+     */
+    List<ClubApplication> findByClubId(Integer clubId);
+
+    /**
+     * 根据学生ID和社团ID查询申请记录
+     */
+    ClubApplication findByStudentIdAndClubId(String studentId, Integer clubId);
+
+    /**
+     * 根据社团ID和状态查询申请记录
+     */
+    List<ClubApplication> findByClubIdAndStatus(Integer clubId, String status);
+    
+    /**
+     * 根据社团ID和状态统计申请数量
+     */
+    long countByClubIdAndStatus(Integer clubId, String status);
 }

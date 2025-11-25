@@ -1,17 +1,41 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Activity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
-import java.time.LocalDateTime;
-import org.springframework.data.domain.Sort;
 
-public interface ActivityRepository extends JpaRepository<Activity, Long> {
+/**
+ * 活动Repository接口
+ */
+@Repository
+public interface ActivityRepository extends JpaRepository<Activity, Integer> {
+    
+    /**
+     * 根据状态查询活动列表
+     */
+    Page<Activity> findByStatus(String status, Pageable pageable);
+    
+    /**
+     * 根据分类ID查询活动列表
+     */
+    List<Activity> findByCategoryId(Integer categoryId);
 
-    // 只保留基本查询方法
-    List<Activity> findByStatus(Activity.ActivityStatus status);
-    List<Activity> findByClubId(Long clubId);
-    List<Activity> findByType(Activity.ActivityType type);
+    /**
+     * 根据标题模糊查询活动列表
+     */
+    List<Activity> findByTitleContaining(String keyword);
+
+    /**
+     * 根据社团ID查询活动列表
+     */
+    List<Activity> findByClubId(Integer clubId);
+    
+    /**
+     * 根据社团ID统计活动数量
+     */
+    long countByClubId(Integer clubId);
 }
