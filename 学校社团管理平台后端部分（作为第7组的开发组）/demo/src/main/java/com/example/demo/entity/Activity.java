@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -42,6 +43,7 @@ public class Activity {
 
     @Column(name = "points")
     private Double points;
+
 
     @Column(name = "status")
     private String status;

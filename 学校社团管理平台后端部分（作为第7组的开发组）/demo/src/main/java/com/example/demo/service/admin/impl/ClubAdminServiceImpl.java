@@ -88,7 +88,7 @@ public class ClubAdminServiceImpl implements ClubAdminService {
         // 查询待处理的申请数量
         try {
             logger.debug("查询待处理申请数量，社团ID: {}", clubId);
-            long pendingApplicationsCount = clubApplicationRepository.countByClubIdAndStatus(clubId, "待审核");
+            long pendingApplicationsCount = clubApplicationRepository.countByClubIdAndStatus(clubId, ApplicationStatus.待审核);
             dashboardDTO.setPendingApplicationsCount((int) pendingApplicationsCount);
         } catch (Exception e) {
             logger.error("查询待处理申请数量异常，社团ID: {}", clubId, e);

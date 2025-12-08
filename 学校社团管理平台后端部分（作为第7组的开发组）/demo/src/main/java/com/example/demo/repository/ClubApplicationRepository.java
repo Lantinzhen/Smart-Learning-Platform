@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.ApplicationStatus;
 import com.example.demo.entity.ClubApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -35,5 +36,5 @@ public interface ClubApplicationRepository extends JpaRepository<ClubApplication
     /**
      * 根据社团ID和状态统计申请数量
      */
-    long countByClubIdAndStatus(Integer clubId, String status);
+    long countByClubIdAndStatus(Integer clubId, ApplicationStatus status);
 }
