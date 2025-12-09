@@ -163,12 +163,21 @@ onMounted(() => {
 
 // 定义下拉菜单项配置
 const dropdownItems = [
+<<<<<<< HEAD
   // {
   //   label: "个人中心",
   //   icon: "User",
   //   divided: false,
   //   handler: handleProfile,
   // },
+=======
+  {
+    label: "个人中心",
+    icon: "User",
+    divided: false,
+    handler: handleProfile,
+  },
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
   {
     label: "切换主题",
     icon: "Sunny",

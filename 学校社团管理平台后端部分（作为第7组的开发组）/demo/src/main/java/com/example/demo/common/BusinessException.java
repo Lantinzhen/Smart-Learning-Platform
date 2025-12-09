@@ -26,4 +26,13 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String message) {
         this(400, message);
     }
+
+
+    /**
+     * 获取错误码
+     * @return 错误码
+     */
+    public Integer getCode() {
+        return code;
+    }
 }

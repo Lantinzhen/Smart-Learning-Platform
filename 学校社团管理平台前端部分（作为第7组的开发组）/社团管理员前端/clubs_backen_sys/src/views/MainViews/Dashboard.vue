@@ -186,9 +186,19 @@ const initData = async () => {
   // 待审核申请数量
   pendingApplicationCount.value = dashboardData.pendingApplicationsCount;
   // 活动数量
+<<<<<<< HEAD
   activitiesCount.value = dashboardData.activitiesCount;
   // 最近活动
   recentActivity.value = dashboardData.recentActivities[0].title;
+=======
+  activitiesCount.value = dashboardData.recentActivities.filter(
+    (item: any) => item.status === "已批准"
+  ).length;
+  // 最近活动
+  recentActivity.value = dashboardData.recentActivities.find(
+    (item: any) => item.status === "已批准"
+  ).title;
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
 };
 
 // 3. 异步获取数据（更新pendingApplications，computed会自动重新计算）

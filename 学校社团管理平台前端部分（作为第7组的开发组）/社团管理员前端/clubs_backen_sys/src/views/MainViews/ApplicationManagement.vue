@@ -34,6 +34,10 @@
         </el-table-column> -->
 
       </el-table>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
       <div class="footer">
         <!-- 分页 -->
         <el-pagination :current-page="activityPagination[item.activityId]?.currentPage || 1"
@@ -102,7 +106,11 @@ const cards = computed(() => [
     value: ApplyApprovedTotal.value,
   },
   {
+<<<<<<< HEAD
     title: "已取消申请",
+=======
+    title: "已拒绝申请",
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
     value: ApplyRejectedTotal.value,
   },
 ]);
@@ -115,6 +123,13 @@ const activityList = ref<ActivityItem[]>([]);
 const activityPagination = ref<Record<number, ActivityPagination>>({});
 
 onMounted(async () => {
+<<<<<<< HEAD
+=======
+  loadData();
+});
+
+const loadData = async () => {
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
   // 重置统计值
   ApplyAllTotal.value = 0;
   ApplyWaitTotal.value = 0;
@@ -123,11 +138,19 @@ onMounted(async () => {
   // 获取活动列表
   await getActivityList();
   if (activityList.value.length > 0) {
+<<<<<<< HEAD
     activityList.value.forEach((activity) => {
       getActivityEnrollList(activity.activityId);
     });
   }
 });
+=======
+    activityList.value.forEach(async (activity) => {
+      await getActivityEnrollList(activity.activityId);
+    });
+  }
+};
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
 
 // 获取活动列表
 const getActivityList = async () => {
@@ -167,6 +190,7 @@ const getActivityEnrollList = async (activityId: number) => {
       pagination.currentPage,
       pagination.pageSize
     );
+<<<<<<< HEAD
     console.log("获取活动报名列表",result.data.list);
     const originalList = result.data.list;
     // 获取当前活动报名列表（只显示已报名状态）
@@ -180,13 +204,29 @@ const getActivityEnrollList = async (activityId: number) => {
     }).length;
     // 获取已批准申请的报名人数（已参加状态）
     ApplyApprovedTotal.value = originalList.filter(
+=======
+    const originalList = result.data.list;
+    // 获取当前活动报名列表
+    pagination.list = originalList.filter((item: ActivityEnrollItem) => {
+      return item.status === "已报名";
+    });
+    // 获取当前页面待处理的报名人数
+    ApplyWaitTotal.value += pagination.list.length;
+    // 获取已批准申请的报名人数
+    ApplyApprovedTotal.value += originalList.filter(
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
       (item: ActivityEnrollItem) => {
         return item.status === "已参加";
       }
     ).length;
+<<<<<<< HEAD
     console.log("ApplyApprovedTotal.value",ApplyApprovedTotal.value);
     // 获取已拒绝申请的报名人数（已拒绝状态）
     ApplyRejectedTotal.value = originalList.filter(
+=======
+    // 获取已拒绝申请的报名人数
+    ApplyRejectedTotal.value += originalList.filter(
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
       (item: ActivityEnrollItem) => {
         return item.status === "已取消";
       }
@@ -227,6 +267,7 @@ const handleSizeChange = (activityId: number, newPageSize: number) => {
   pagination.pageSize = newPageSize;
   // 切换条数后重回第一页
   pagination.currentPage = 1;
+<<<<<<< HEAD
   // 重置统计值后重新加载所有活动的列表
   ApplyAllTotal.value = 0;
   ApplyWaitTotal.value = 0;
@@ -235,6 +276,10 @@ const handleSizeChange = (activityId: number, newPageSize: number) => {
   activityList.value.forEach((activity) => {
     getActivityEnrollList(activity.activityId);
   });
+=======
+  // 重新加载该活动的列表
+  getActivityEnrollList(activityId);
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
 };
 
 // 新增：处理页码变化
@@ -243,6 +288,7 @@ const handleCurrentChange = (activityId: number, newCurrentPage: number) => {
   if (!pagination) return;
 
   pagination.currentPage = newCurrentPage;
+<<<<<<< HEAD
   // 重置统计值后重新加载所有活动的列表
   ApplyAllTotal.value = 0;
   ApplyWaitTotal.value = 0;
@@ -251,6 +297,10 @@ const handleCurrentChange = (activityId: number, newCurrentPage: number) => {
   activityList.value.forEach((activity) => {
     getActivityEnrollList(activity.activityId);
   });
+=======
+  // 重新加载该活动的列表
+  getActivityEnrollList(activityId);
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
 };
 
 // 一键审批
@@ -263,7 +313,12 @@ const handleApprove = async (activityId: number) => {
       points_earned: await getActivityDetail(activityId),
     });
     ElMessage.success("审批成功");
+<<<<<<< HEAD
     await getActivityEnrollList(activityId);
+=======
+    // 重新加载数据
+    await loadData();
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
   } catch (error) {
     ElMessage.error("审批失败");
   }
@@ -280,6 +335,9 @@ const handleApprove = async (activityId: number) => {
   margin-top: 20px;
   align-items: center;
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 4d7e1947506a809d715c2ad8e2e93f83fbb1cb74
 </style>
