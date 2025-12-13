@@ -88,10 +88,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     /**
-     * 更新个人信息（包含头像上传）
+     * 更新个人信息
      * @param token JWT令牌
      * @param profile 个人信息
-     * @param file 头像文件（可选）
+     * @param file 头像文件（可选，保留兼容性）
      */
     @Override
     public void updateProfile(String token, UpdateProfileDTO profile, MultipartFile file) {
@@ -105,23 +105,34 @@ public class ProfileServiceImpl implements ProfileService {
         }
         
         // 更新个人信息 - 只更新非空字段，支持部分更新
+        if (profile.getName() != null) {
+            student.setName(profile.getName());
+        }
         if (profile.getEmail() != null) {
             student.setEmail(profile.getEmail());
         }
         if (profile.getPhone() != null) {
             student.setPhone(profile.getPhone());
         }
+        if (profile.getMajor() != null) {
+            student.setMajor(profile.getMajor());
+        }
+        if (profile.getGrade() != null) {
+            student.setGrade(profile.getGrade());
+        }
+        if (profile.getEnrollmentYear() != null) {
+            student.setEnrollmentYear(profile.getEnrollmentYear());
+        }
+        if (profile.getGender() != null) {
+            student.setGender(profile.getGender());
+        }
         
-        // 优先处理文件上传
+        // 只支持通过文件上传更新头像
         if (file != null && !file.isEmpty()) {
             // 保存文件到服务器，获取头像URL
             String avatarUrl = saveAvatarFile(file);
             // 设置头像URL
             student.setAvatarUrl(avatarUrl);
-        }
-        // 只有在没有上传文件的情况下，才考虑使用DTO中的avatarUrl
-        else if (profile.getAvatarUrl() != null) {
-            student.setAvatarUrl(profile.getAvatarUrl());
         }
         
         // 确保更新时间被正确设置
@@ -130,6 +141,8 @@ public class ProfileServiceImpl implements ProfileService {
         // 保存更新后的信息
         studentRepository.saveAndFlush(student);
     }
+    
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -147,7 +160,7 @@ public class ProfileServiceImpl implements ProfileService {
         // 查询学生信息
         Student student = studentRepository.findByStudentId(studentId);
         if (student == null) {
-            throw new RuntimeException("学生信息不存在");
+            throw new BusinessException(404, "学生信息不存在");
         }
         
         // 验证旧密码（支持明文密码和加密密码）
