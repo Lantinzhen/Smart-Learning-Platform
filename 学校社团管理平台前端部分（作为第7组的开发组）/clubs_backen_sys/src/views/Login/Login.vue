@@ -8,39 +8,21 @@
         <p class="subtitle">管理员的社团管理系统</p>
       </div>
       <!-- 表单 -->
-      <el-form ref="loginFormRef"
-               :model="loginForm"
-               :rules="loginRules"
-               label-width="80px">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" label-width="80px">
         <!-- 用户名 -->
-        <el-form-item label="用户名"
-                      prop="username"
-                      class="login-input-item">
-          <el-input v-model="loginForm.username"
-                    placeholder="请输入用户名"
-                    prefix-icon="el-icon-user"
-                    class="form-input"
-                    clearable />
+        <el-form-item label="用户名" prop="username" class="login-input-item">
+          <el-input v-model="loginForm.username" placeholder="请输入用户名" prefix-icon="el-icon-user" class="form-input"
+            clearable />
         </el-form-item>
 
         <!-- 密码 -->
-        <el-form-item label="密码"
-                      prop="password"
-                      class="login-input-item">
-          <el-input v-model="loginForm.password"
-                    type="password"
-                    placeholder="请输入密码"
-                    prefix-icon="el-icon-lock"
-                    class="form-input"
-                    clearable
-                    show-password />
+        <el-form-item label="密码" prop="password" class="login-input-item">
+          <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" prefix-icon="el-icon-lock"
+            class="form-input" clearable show-password />
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item>
-          <el-button type="primary"
-                     class="login-btn"
-                     @click="handleLogin"
-                     :loading="loading">
+          <el-button type="primary" class="login-btn" @click="handleLogin" :loading="loading">
             登录
           </el-button>
         </el-form-item>
@@ -48,20 +30,17 @@
 
       <!-- 返回总主页 -->
       <div class="login-footer">
-        <el-button type="text"
-                   @click="goToHome">返回主页面</el-button>
+        <el-button type="text" @click="goToHome">返回主页面</el-button>
       </div>
     </div>
 
     <!-- 美化动画 -->
     <div class="animate-class">
       <ul class="square">
-        <li v-for="i in 5"
-            :key="i"></li>
+        <li v-for="i in 5" :key="i"></li>
       </ul>
       <ul class="circle">
-        <li v-for="i in 5"
-            :key="i"></li>
+        <li v-for="i in 5" :key="i"></li>
       </ul>
     </div>
 
@@ -143,12 +122,10 @@ const goToHome = () => {
   justify-content: center;
   align-items: center;
   background-color: #f0f2f5;
-  background-image: linear-gradient(
-    135deg,
-    #4ade80 0%,
-    #37cb0a 60%,
-    #facc15 100%
-  );
+  background-image: linear-gradient(135deg,
+      #4ade80 0%,
+      #37cb0a 60%,
+      #facc15 100%);
   position: relative;
   overflow: hidden;
   animation: gradientBG 15s ease infinite;
@@ -159,9 +136,11 @@ const goToHome = () => {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -179,6 +158,7 @@ const goToHome = () => {
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
 .logo {
   text-align: center;
   margin-bottom: 40px;
@@ -239,6 +219,7 @@ const goToHome = () => {
   transition: all 0.3s ease;
   overflow: visible;
 }
+
 /* 优化输入框悬停样式 */
 :deep(.el-input__wrapper:hover) {
   border-color: #4ade80;
@@ -250,6 +231,7 @@ const goToHome = () => {
   border-color: #4ade80;
   box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
 }
+
 /* 优化输入框内文本样式 */
 :deep(.el-input__inner) {
   padding: 12px 0;
@@ -267,6 +249,7 @@ const goToHome = () => {
   font-size: 14px;
   padding: 0 12px 0 0;
 }
+
 /* 优化表单标签悬停样式 */
 :deep(.el-form-item__label:hover) {
   color: #1890ff;
@@ -287,6 +270,7 @@ const goToHome = () => {
   position: relative;
   overflow: hidden;
 }
+
 /* 滑块 样式优化 */
 .login-btn::before {
   content: "";
@@ -296,12 +280,10 @@ const goToHome = () => {
   left: -20%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
   transition: all 0.5s;
 }
 
@@ -342,6 +324,7 @@ const goToHome = () => {
   border-radius: 6px;
   transition: all 0.3s ease;
 }
+
 /* 优化返回总按钮 悬停样式 */
 :deep(.login-footer .el-button:hover) {
   color: #1890ff;
@@ -371,6 +354,7 @@ const goToHome = () => {
   left: 10vw;
   animation-delay: 2s;
 }
+
 .square li:nth-child(3) {
   top: 80vh;
   left: 85vw;
@@ -382,6 +366,7 @@ const goToHome = () => {
   left: 70vw;
   animation-delay: 6s;
 }
+
 .square li:nth-child(5) {
   top: 20vh;
   left: 10vw;
@@ -396,18 +381,22 @@ const goToHome = () => {
   height: 30px;
   animation: circle 5s linear infinite;
 }
+
 .circle li:nth-child(2) {
   left: 25vw;
   animation-delay: 2s;
 }
+
 .circle li:nth-child(3) {
   left: 55vw;
   animation-delay: 4s;
 }
+
 .circle li:nth-child(4) {
   left: 75vw;
   animation-delay: 6s;
 }
+
 .circle li:nth-child(5) {
   left: 90vw;
   animation-delay: 8s;
@@ -418,11 +407,13 @@ const goToHome = () => {
     transform: scale(0) rotateY(0deg);
     opacity: 1;
   }
+
   100% {
     transform: scale(5) rotateY(1000deg);
     opacity: 0;
   }
 }
+
 @keyframes circle {
   0% {
     transform: scale(0) rotateY(0deg);
@@ -430,6 +421,7 @@ const goToHome = () => {
     bottom: 0;
     border-radius: 0;
   }
+
   100% {
     transform: scale(5) rotateY(1000deg);
     opacity: 0;

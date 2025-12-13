@@ -169,7 +169,8 @@
 [data-theme="dark"] :deep(.el-drawer) {
   background-color: #303133 !important;
 }
+
 [data-theme="dark"] :root {
- --el-bg-color: #4165d7 !important;
+  --el-bg-color: #4165d7 !important;
 }
 </style>
