@@ -17,6 +17,7 @@
     "lint": "run-s lint:*"
   },
   "dependencies": {
+    "@dcloudio/uni-ui": "^1.5.11",
     "@element-plus/icons": "^0.0.11",
     "axios": "^1.13.2",
     "element-plus": "^2.11.9",
@@ -37,6 +38,8 @@
     "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
     "oxlint": "~1.29.0",
+    "sass": "^1.96.0",
+    "sass-loader": "^10.1.1",
     "typescript": "~5.9.0",
     "vite": "^7.2.4",
     "vite-plugin-vue-devtools": "^8.0.5",

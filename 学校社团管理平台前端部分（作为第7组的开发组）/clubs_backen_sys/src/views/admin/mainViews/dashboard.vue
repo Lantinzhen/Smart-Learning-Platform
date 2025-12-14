@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="dashboard-container">
+    <upload />
     <div class="dashboard-header">
       <h1>数据分析</h1>
     </div>
@@ -166,6 +167,8 @@ import { ElMessage } from "element-plus";
 import { formatIsoTime } from "../../../utils/format";
 import { useRouter } from "vue-router";
 import DataCard from "../../../components/DataCard.vue";
+import upload from "@/components/upload.vue";
+
 // 引入类型
 import type {
   ApplicationItem,
@@ -436,13 +439,13 @@ const fetchStatistics = async () => {
   border-radius: 16px;
   border: 0.5px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
-              0 1px 2px rgba(0, 0, 0, 0.04);
+    0 1px 2px rgba(0, 0, 0, 0.04);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .statistics-card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
-              0 2px 4px rgba(0, 0, 0, 0.06);
+    0 2px 4px rgba(0, 0, 0, 0.06);
   transform: translateY(-2px);
 }
 
