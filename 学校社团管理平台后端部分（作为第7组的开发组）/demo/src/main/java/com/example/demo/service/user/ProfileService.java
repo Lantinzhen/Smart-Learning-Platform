@@ -1,7 +1,6 @@
 package com.example.demo.service.user;
 
 import com.example.demo.dto.user.profile.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 个人中心服务接口
@@ -16,12 +15,11 @@ public interface ProfileService {
     ProfileDTO getProfile(String token);
     
     /**
-     * 更新个人信息（包含头像上传）
+     * 更新个人信息
      * @param token JWT令牌
      * @param profile 个人信息
-     * @param file 头像文件（可选）
      */
-    void updateProfile(String token, UpdateProfileDTO profile, MultipartFile file);
+    void updateProfile(String token, UpdateProfileDTO profile);
     
     /**
      * 修改密码

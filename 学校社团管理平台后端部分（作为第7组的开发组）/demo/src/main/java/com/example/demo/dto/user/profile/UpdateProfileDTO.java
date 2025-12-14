@@ -1,6 +1,5 @@
 package com.example.demo.dto.user.profile;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -15,6 +14,4 @@ public class UpdateProfileDTO {
     private String grade;       // 年级
     private Integer enrollmentYear; // 入学年份
     private String gender;      // 性别
-    @JsonProperty("avatar_url")
-    private String avatarUrl;   // 头像URL
 }

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 个人中心控制器
@@ -49,13 +48,12 @@ public class ProfileController {
     }
 
     /**
-     * 更新个人信息（包含头像上传）
+     * 更新个人信息
      */
     @PostMapping("/profile")
     public Response<Void> updateProfile(
             @RequestHeader("Authorization") String token,
-            @RequestPart("profile") UpdateProfileDTO profile,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
+            @RequestBody UpdateProfileDTO profile) {
         logger.info("开始更新用户个人信息");
         try {
             // 移除Bearer前缀（如果有），否则直接使用token
@@ -63,8 +61,8 @@ public class ProfileController {
                 token = token.substring(7);
             }
             
-            logger.debug("准备调用服务更新个人信息，是否包含头像文件: {}", file != null);
-            profileService.updateProfile(token, profile, file);
+            logger.debug("准备调用服务更新个人信息");
+            profileService.updateProfile(token, profile);
             logger.info("更新用户个人信息成功");
             
             return Response.success(null);

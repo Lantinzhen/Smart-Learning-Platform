@@ -502,7 +502,6 @@ Authorization: Bearer {token}
 {
   "email": "zhangsan_new@example.com",
   "phone": "13900139000",
-  "avatar_url": "http://example.com/new_avatar.png"
 }
 ```
 **响应**:
