@@ -123,3 +123,27 @@ export interface ActivityPagination {
   list: ActivityEnrollItem[]; // 报名列表
   registrationIds:number[];
 }
+
+// 活动审批详情（用于学校管理员审批）
+export interface ActivityApprovalDetail extends ActivityDetail {
+  // 审批ID
+  approvalId?: number;
+  // 审批意见
+  comments?: string;
+  // 审批人ID
+  approverId?: string;
+  // 审批时间
+  approvedAt?: string;
+  // 社团ID
+  clubId?: number;
+  // 社团名称
+  clubName?: string;
+}
+
+// 审批表单
+export interface ActivityApprovalForm {
+  // 审批状态
+  status: '已批准' | '已拒绝';
+  // 审批意见
+  comments: string;
+}

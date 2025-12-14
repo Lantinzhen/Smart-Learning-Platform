@@ -1,7 +1,7 @@
 <template>
   <div class="application-container">
     <div class="application-header">
-      <h1>{{ club_name }} 申请管理</h1>
+      <h1>社团活动申请管理</h1>
     </div>
 
     <!-- 数据卡片统计 -->
@@ -58,11 +58,11 @@ import type {
   ActivityEnrollItem,
   ActivityItem,
   ActivityPagination,
-} from "../../types/activity";
-import { useActivityStore } from "../../stores/activity";
+} from "../../../types/activity";
+import { useActivityStore } from "../../../stores/activity";
 import { ElMessage } from "element-plus";
 import { pa } from "element-plus/es/locales.mjs";
-import DataCard from "../../components/DataCard.vue";
+import DataCard from "../../../components/DataCard.vue";
 
 const club_name = localStorage.getItem("club_name");
 
@@ -249,14 +249,130 @@ const handleApprove = async (activityId: number) => {
 };
 </script>
 <style scoped>
+/* Apple Design System 字体栈 */
 .application-container {
-  padding: 20px 40px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.application-container {
+  padding: 24px;
+}
+
+.application-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 32px;
 }
 
 .footer {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 24px;
   align-items: center;
+  gap: 16px;
+}
+
+/* 卡片样式 - Apple风格 */
+:deep(.el-card) {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 16px;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
+              0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:deep(.el-card:hover) {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+              0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.item-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.3px;
+  margin-bottom: 20px;
+}
+
+/* 表格样式 - Apple风格 */
+:deep(.el-table) {
+  background: transparent;
+  border-radius: 12px;
+}
+
+:deep(.el-table__header) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+:deep(.el-table th) {
+  background: rgba(0, 0, 0, 0.02);
+  color: #1d1d1f;
+  font-weight: 500;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+
+:deep(.el-table td) {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+  color: #1d1d1f;
+}
+
+:deep(.el-table tr:hover > td) {
+  background: rgba(0, 122, 255, 0.05);
+}
+
+/* 按钮样式 - Apple风格 */
+:deep(.el-button) {
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 暗色模式 */
+[data-theme="dark"] .application-container {
+  background: #000000;
+}
+
+[data-theme="dark"] .application-header h1 {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .item-title {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] :deep(.el-card) {
+  background: rgba(28, 28, 30, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] :deep(.el-table__header) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] :deep(.el-table th) {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f5f5f7;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] :deep(.el-table td) {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] :deep(.el-table tr:hover > td) {
+  background: rgba(10, 132, 255, 0.15);
 }
 </style>
