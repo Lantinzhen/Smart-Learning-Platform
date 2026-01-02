@@ -30,7 +30,7 @@
 
       <!-- 返回总主页 -->
       <div class="login-footer">
-        <el-button type="text" @click="goToHome">返回主页面</el-button>
+        <el-button type="text" @click="goToHome">前往学校管理员登录</el-button>
       </div>
     </div>
 
@@ -108,10 +108,9 @@ const handleLogin = async () => {
 };
 
 const goToHome = () => {
-  // router.push("/");
-  // ElMessage.success("已返回");
-  // ElMessage.error("已返回");
-  ElMessage.info("返回功能有待实现");
+  // 提示信息
+  ElMessage.success("前往学校管理员页成功");
+  router.push("/admin/login");
 };
 </script>
 

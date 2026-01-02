@@ -54,58 +54,6 @@
           <i class="icon-login"></i> 学生登录
         </el-button>
       </el-card>
-
-      <!-- 社团管理员卡片 -->
-      <el-card class="role-card admin-card" @mouseenter="hoverCard = 'admin'" @mouseleave="hoverCard = ''">
-        <div class="card-icon admin-icon">
-          <!-- 管理员图标 -->
-          <i class="icon-admin"></i>
-        </div>
-        <h2 class="card-title">社团管理员</h2>
-        <p class="card-desc">管理社团成员和活动申请</p>
-        <div class="card-features">
-          <div class="feature-item">
-            <i class="icon-check"></i> 成员管理
-          </div>
-          <div class="feature-item">
-            <i class="icon-check"></i> 活动审批
-          </div>
-        </div>
-        <el-button 
-          type="primary" 
-          class="login-btn"
-          :class="{ 'hover-btn': hoverCard === 'admin' }"
-          @click="$router.push('/admin/login')"
-        >
-          <i class="icon-login"></i> 管理员登录
-        </el-button>
-      </el-card>
-
-      <!-- 学校管理员卡片 -->
-      <el-card class="role-card school-card" @mouseenter="hoverCard = 'school'" @mouseleave="hoverCard = ''">
-        <div class="card-icon school-icon">
-          <!-- 学校管理图标 -->
-          <i class="icon-school"></i>
-        </div>
-        <h2 class="card-title">学校管理员</h2>
-        <p class="card-desc">管理社团创建和活动审批</p>
-        <div class="card-features">
-          <div class="feature-item">
-            <i class="icon-check"></i> 系统管理
-          </div>
-          <div class="feature-item">
-            <i class="icon-check"></i> 数据统计
-          </div>
-        </div>
-        <el-button 
-          type="primary" 
-          class="login-btn"
-          :class="{ 'hover-btn': hoverCard === 'school' }"
-          @click="$router.push('/school/login')"
-        >
-          <i class="icon-login"></i> 系统登录
-        </el-button>
-      </el-card>
     </main>
 
     <!-- 底部特性区域 -->
