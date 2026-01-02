@@ -141,7 +141,7 @@ import axios from 'axios';
 
 // 创建axios实例
 const studentApi = axios.create({
-  baseURL: 'http://10.34.105.231:8080/api/v1',
+  baseURL: 'http://10.34.58.66:9099/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'

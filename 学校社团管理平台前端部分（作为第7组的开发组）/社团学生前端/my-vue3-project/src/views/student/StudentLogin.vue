@@ -122,11 +122,11 @@ const loginForm = reactive({
 const loginRules = reactive({
   studentId: [
     { required: true, message: '请输入学号', trigger: 'blur' },
-    { pattern: /^\d{7,15}$/, message: '学号为10-15位数字', trigger: 'blur' }
+    { min: 3, message: '学号为10-15位数字', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/, message: '密码需6-16位，包含字母和数字', trigger: 'blur' }
+    { min: 6, message: '密码需6-16位，包含字母和数字', trigger: 'blur' }
   ]
 })
 
