@@ -5,65 +5,6 @@
     <div class="dashboard-header">
       <h1>数据分析</h1>
     </div>
-    <!-- <div class="dashboard-main">
-      <el-card class="dashboard-section">
-        <div class="section-header">
-          <h3>待处理申请</h3>
-        </div>
-        <div class="pending-applications">
-          <div v-if="filterApplications.length === 0"
-               class="empty-message">
-            暂无待处理申请
-          </div>
-          <template v-else>
-            <div v-for="app in filterApplications"
-                 :key="app.applicationId"
-                 class="application-item"
-                 @click="showApplicationDetail(app.applicationId)">
-              <div class="app-info">
-                <p class="app-name"> <span>{{ app.name }} </span>申请加入社团</p>
-                <p class="app-time">{{ formatIsoTime(app.createdAt) }}</p>
-              </div>
-
-            </div>
-          </template>
-
-</div>
-</el-card>
-
-<el-card class="dashboard-section">
-  <div class="section-header">
-    <h3>快捷操作</h3>
-  </div>
-  <div class="quick-actions">
-    <div class="action-card" @click="navigateTo('activity')">
-      <div class="action-icon" style="background: linear-gradient(135deg, #FF6B6B, #FFA500);">
-        <el-icon>
-          <Suitcase />
-        </el-icon>
-      </div>
-      <div class="action-text">活动管理</div>
-    </div>
-    <div class="action-card" @click="navigateTo('member')">
-      <div class="action-icon" style="background: linear-gradient(135deg, #00C9A7, #FFD166);">
-        <el-icon>
-          <User />
-        </el-icon>
-      </div>
-      <div class="action-text">成员管理</div>
-    </div>
-    <div class="action-card" @click="navigateTo('application')">
-      <div class="action-icon" style="background: linear-gradient(135deg, #06D6A0, #118AB2);">
-        <el-icon>
-          <DocumentAdd />
-        </el-icon>
-      </div>
-      <div class="action-text">申请管理</div>
-    </div>
-  </div>
-</el-card> -->
-
-    <!-- </div> -->
     <!-- 统计数据展示区域 -->
     <div class="statistics-section">
       <el-card class="statistics-card">
@@ -74,16 +15,9 @@
           <div v-if="clubActivityList.length === 0" class="empty-message">
             暂无数据
           </div>
-          <el-table v-else :data="clubActivityList" style="width: 100%">
-            <el-table-column prop="clubName" label="社团名称" width="180" />
-            <el-table-column prop="totalActivities" label="活动总数" width="120" />
-            <el-table-column prop="totalParticipants" label="参与人数" width="120" />
-            <el-table-column prop="avgPoints" label="平均积分" width="120">
-              <template #default="scope">
-                {{ scope.row.avgPoints?.toFixed(2) || 0 }}
-              </template>
-            </el-table-column>
-          </el-table>
+          <div v-else class="chart-container">
+            <div ref="clubActivityChartRef" class="chart-wrapper"></div>
+          </div>
         </div>
       </el-card>
 
@@ -95,19 +29,9 @@
           <div v-if="studentActivityList.length === 0" class="empty-message">
             暂无数据
           </div>
-          <el-table v-else :data="studentActivityList" style="width: 100%" max-height="300">
-            <el-table-column prop="name" label="姓名" width="120" />
-            <el-table-column prop="studentId" label="学号" width="120" />
-            <el-table-column prop="major" label="专业" width="150" />
-            <el-table-column prop="grade" label="年级" width="100" />
-            <el-table-column prop="totalActivities" label="总活动数" width="100" />
-            <el-table-column prop="attendedActivities" label="参与活动数" width="120" />
-            <el-table-column prop="totalPoints" label="总积分" width="100">
-              <template #default="scope">
-                {{ scope.row.totalPoints?.toFixed(1) || 0 }}
-              </template>
-            </el-table-column>
-          </el-table>
+          <div v-else class="chart-container">
+            <div ref="studentActivityChartRef" class="chart-wrapper"></div>
+          </div>
         </div>
       </el-card>
 
@@ -119,59 +43,30 @@
           <div v-if="activityParticipationList.length === 0" class="empty-message">
             暂无数据
           </div>
-          <el-table v-else :data="activityParticipationList" style="width: 100%" max-height="300">
-            <el-table-column prop="title" label="活动名称" width="200" />
-            <el-table-column prop="clubName" label="社团名称" width="150" />
-            <el-table-column prop="maxParticipants" label="最大参与数" width="120" />
-            <el-table-column prop="registeredCount" label="已报名数" width="100" />
-            <el-table-column prop="participationRate" label="参与率" width="120">
-              <template #default="scope">
-                {{ scope.row.participationRate?.toFixed(1) || 0 }}%
-              </template>
-            </el-table-column>
-          </el-table>
+          <div v-else class="chart-container">
+            <div ref="participationRateChartRef" class="chart-wrapper"></div>
+          </div>
         </div>
       </el-card>
     </div>
-    <!-- 申请详情 模态框 -->
-    <el-dialog title="申请详情" v-model="showApplication" width="600px">
-      <el-form class="form-show">
-        <el-form-item label="姓名">{{ detail?.name }}</el-form-item>
-        <el-form-item label="学号">{{ detail?.studentId }}</el-form-item>
-        <el-form-item label="年级">{{ detail?.grade }}</el-form-item>
-        <el-form-item label="专业">{{ detail?.major }}</el-form-item>
-        <el-form-item label="邮件">{{ detail?.email }}</el-form-item>
-        <el-form-item label="手机号">{{ detail?.phone }}</el-form-item>
-        <el-form-item label="活动兴趣偏好">{{ detail?.activityPreference }}</el-form-item>
-        <el-form-item label="闲暇时间">{{ detail?.availableTime }}</el-form-item>
-        <el-form-item label="申请人经历">{{ detail?.experience }}</el-form-item>
-        <el-form-item label="申请理由">{{ detail?.reason }} </el-form-item>
-        <div class="app-actions">
-          <el-button type="success" @click="handleApprove(detail?.applicationId)">同意</el-button>
-          <el-button type="danger" @click="handleReject(detail?.applicationId)">拒绝</el-button>
-        </div>
-
-      </el-form>
-
-    </el-dialog>
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, onUnmounted } from "vue";
-import { useDashboardStore } from "../../../stores/dashboard";
+import { onMounted, ref, onUnmounted, nextTick } from "vue";
+// import { useDashboardStore } from "../../../stores/dashboard";
 import { useApplicationStore } from "../../../stores/application";
 import { useAdminDashboardStore } from "../../../stores/admin/dashboard";
 import { ElMessage } from "element-plus";
-import { formatIsoTime } from "../../../utils/format";
-import { useRouter } from "vue-router";
-import DataCard from "../../../components/DataCard.vue";
+// import { formatIsoTime } from "../../../utils/format";
+// import { useRouter } from "vue-router";
+// import DataCard from "../../../components/DataCard.vue";
 import upload from "@/components/upload.vue";
+import * as echarts from "echarts";
 
 // 引入类型
 import type {
-  ApplicationItem,
+  // ApplicationItem,
   ApplicationDetail,
 } from "../../../types/application";
 
@@ -204,28 +99,36 @@ interface ActivityParticipationItem {
 }
 
 //stores
-const dashboardStore = useDashboardStore();
+// const dashboardStore = useDashboardStore();
 const applicationStore = useApplicationStore();
 const adminDashboardStore = useAdminDashboardStore();
 
 // 路由
-const router = useRouter();
+// const router = useRouter();
 
 // 社团名称
-const club_name = ref("");
+// const club_name = ref("");
 // 成员数量
-const member_count = ref(0);
+// const member_count = ref(0);
 // 待审核申请数量
-const pendingApplicationCount = ref(0);
+// const pendingApplicationCount = ref(0);
 // 活动数量
-const activitiesCount = ref(0);
+// const activitiesCount = ref(0);
 // 最近活动
-const recentActivity = ref(0);
+// const recentActivity = ref(0);
 
 // 统计数据
 const clubActivityList = ref<ClubActivityItem[]>([]);
 const studentActivityList = ref<StudentActivityItem[]>([]);
 const activityParticipationList = ref<ActivityParticipationItem[]>([]);
+
+// ECharts 实例
+const clubActivityChartRef = ref<HTMLDivElement | null>(null);
+const studentActivityChartRef = ref<HTMLDivElement | null>(null);
+const participationRateChartRef = ref<HTMLDivElement | null>(null);
+let clubActivityChart: echarts.ECharts | null = null;
+let studentActivityChart: echarts.ECharts | null = null;
+let participationRateChart: echarts.ECharts | null = null;
 
 // 显示申请详情
 const showApplication = ref(false);
@@ -233,19 +136,19 @@ const showApplication = ref(false);
 const detail = ref<ApplicationDetail | null>(null);
 
 // 1. 定义响应式数据（全局）
-const pendingApplications = ref<{ list: ApplicationItem[]; total: number }>({
-  list: [],
-  total: 0,
-}); // 所有申请列表
+// const pendingApplications = ref<{ list: ApplicationItem[]; total: number }>({
+//   list: [],
+//   total: 0,
+// }); // 所有申请列表
 // 2. 定义computed（全局，依赖pendingApplications）
-const filterApplications = computed(() => {
-  // 判空：确保list存在
-  if (!pendingApplications.value?.list) return [];
-  // 筛选"待审核"的申请
-  return pendingApplications.value.list.filter(
-    (item) => item.status === "待审核"
-  );
-});
+// const filterApplications = computed(() => {
+//   // 判空：确保list存在
+//   if (!pendingApplications.value?.list) return [];
+//   // 筛选"待审核"的申请
+//   return pendingApplications.value.list.filter(
+//     (item) => item.status === "待审核"
+//   );
+// });
 
 // 添加定时器引用
 const pollingTimer = ref<number | null>(null);
@@ -266,6 +169,16 @@ onUnmounted(() => {
   // 销毁定时器
   if (pollingTimer.value) {
     clearInterval(pollingTimer.value);
+  }
+  // 销毁图表实例
+  if (clubActivityChart) {
+    clubActivityChart.dispose();
+  }
+  if (studentActivityChart) {
+    studentActivityChart.dispose();
+  }
+  if (participationRateChart) {
+    participationRateChart.dispose();
   }
 });
 const initData = async () => {
@@ -292,43 +205,43 @@ const initData = async () => {
 };
 
 // 3. 异步获取数据（更新pendingApplications，computed会自动重新计算）
-const fetchPendingList = async () => {
-  try {
-    // const result = await applicationStore.getApplyList();
+// const fetchPendingList = async () => {
+//   try {
+//     // const result = await applicationStore.getApplyList();
 
-    // pendingApplications.value = result.data; // 更新响应式数据
-    // console.log("所有申请列表:", result);
-    // // 此时computed已经自动计算，直接打印filterApplications.value即可
-    // console.log("筛选后的申请:", filterApplications.value);
-  } catch (error) {
-    console.error("获取申请列表失败:", error);
-    pendingApplications.value = { list: [], total: 0 }; // 异常时重置
-  }
-};
+//     // pendingApplications.value = result.data; // 更新响应式数据
+//     // console.log("所有申请列表:", result);
+//     // // 此时computed已经自动计算，直接打印filterApplications.value即可
+//     // console.log("筛选后的申请:", filterApplications.value);
+//   } catch (error) {
+//     console.error("获取申请列表失败:", error);
+//     // pendingApplications.value = { list: [], total: 0 }; // 异常时重置
+//   }
+// };
 
 // 方法
-const navigateTo = (routeName: string) => {
-  router.push({ name: routeName });
-};
+// const navigateTo = (routeName: string) => {
+//   router.push({ name: routeName });
+// };
 
-const cards = computed(() => [
-  {
-    title: "待审核入团申请",
-    value: pendingApplicationCount.value,
-  },
-  {
-    title: "社团成员",
-    value: member_count.value,
-  },
-  {
-    title: "活动总数",
-    value: activitiesCount.value,
-  },
-  {
-    title: "近期活动",
-    value: recentActivity.value,
-  },
-]);
+// const cards = computed(() => [
+//   {
+//     title: "待审核入团申请",
+//     value: pendingApplicationCount.value,
+//   },
+//   {
+//     title: "社团成员",
+//     value: member_count.value,
+//   },
+//   {
+//     title: "活动总数",
+//     value: activitiesCount.value,
+//   },
+//   {
+//     title: "近期活动",
+//     value: recentActivity.value,
+//   },
+// ]);
 
 // 同意申请
 const handleApprove = async (applicationId: number | undefined) => {
@@ -339,9 +252,9 @@ const handleApprove = async (applicationId: number | undefined) => {
       "欢迎加入"
     );
     // 关键：审核成功后刷新申请列表
-    await fetchPendingList();
+    // await fetchPendingList();
     // 同时刷新统计数据（待审核数量会减少）
-    await initData();
+    // await initData();
     showApplication.value = false;
     ElMessage.success("申请通过成功");
   } catch {
@@ -358,9 +271,9 @@ const handleReject = async (applicationId: number | undefined) => {
     );
 
     // 关键：审核成功后刷新申请列表
-    await fetchPendingList();
+    // await fetchPendingList();
     // 同时刷新统计数据（待审核数量会减少）
-    await initData();
+    // await initData();
     showApplication.value = false;
     ElMessage.success("申请拒绝成功");
   } catch {
@@ -369,12 +282,12 @@ const handleReject = async (applicationId: number | undefined) => {
 };
 
 // 显示申请详情
-const showApplicationDetail = async (applicationId: number) => {
-  showApplication.value = true;
+// const showApplicationDetail = async (applicationId: number) => {
+//   showApplication.value = true;
 
-  detail.value = await applicationStore.getApplyDetail(applicationId);
-  // console.log("申请详情:", detail);
-};
+//   detail.value = await applicationStore.getApplyDetail(applicationId);
+//   // console.log("申请详情:", detail);
+// };
 
 // 获取统计数据
 const fetchStatistics = async () => {
@@ -392,10 +305,291 @@ const fetchStatistics = async () => {
     const participationRes =
       await adminDashboardStore.getActivityParticipationStatistics();
     activityParticipationList.value = participationRes.data?.list || [];
+
+    // 更新图表
+    await nextTick();
+    initClubActivityChart();
+    initStudentActivityChart();
+    initParticipationRateChart();
   } catch (error) {
     console.error("获取统计数据失败:", error);
     ElMessage.error("获取统计数据失败");
   }
+};
+
+// 初始化社团活跃度统计图表
+const initClubActivityChart = () => {
+  if (!clubActivityChartRef.value || clubActivityList.value.length === 0) return;
+
+  if (clubActivityChart) {
+    clubActivityChart.dispose();
+  }
+
+  clubActivityChart = echarts.init(clubActivityChartRef.value);
+  const option: echarts.EChartsOption = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {
+      data: ["活动总数", "参与人数", "平均积分"],
+      top: 10,
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "category",
+      data: clubActivityList.value.map((item) => item.clubName),
+      axisLabel: {
+        rotate: 45,
+        interval: 0,
+      },
+    },
+    yAxis: [
+      {
+        type: "value",
+        name: "数量",
+        position: "left",
+      },
+      {
+        type: "value",
+        name: "积分",
+        position: "right",
+      },
+    ],
+    series: [
+      {
+        name: "活动总数",
+        type: "bar",
+        data: clubActivityList.value.map((item) => item.totalActivities),
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#83bff6" },
+            { offset: 0.5, color: "#188df0" },
+            { offset: 1, color: "#188df0" },
+          ]),
+        },
+      },
+      {
+        name: "参与人数",
+        type: "bar",
+        data: clubActivityList.value.map((item) => item.totalParticipants),
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#ffd93d" },
+            { offset: 0.5, color: "#ff6b6b" },
+            { offset: 1, color: "#ff6b6b" },
+          ]),
+        },
+      },
+      {
+        name: "平均积分",
+        type: "line",
+        yAxisIndex: 1,
+        data: clubActivityList.value.map((item) => item.avgPoints?.toFixed(2) || 0),
+        itemStyle: {
+          color: "#06d6a0",
+        },
+        lineStyle: {
+          width: 3,
+        },
+        symbol: "circle",
+        symbolSize: 8,
+      },
+    ],
+  };
+  clubActivityChart.setOption(option);
+};
+
+// 初始化学生活动参与统计图表
+const initStudentActivityChart = () => {
+  if (!studentActivityChartRef.value || studentActivityList.value.length === 0) return;
+
+  if (studentActivityChart) {
+    studentActivityChart.dispose();
+  }
+
+  // 只显示前10名，避免图表过于拥挤
+  const displayData = studentActivityList.value.slice(0, 10);
+
+  studentActivityChart = echarts.init(studentActivityChartRef.value);
+  const option: echarts.EChartsOption = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {
+      data: ["总活动数", "参与活动数", "总积分"],
+      top: 10,
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "category",
+      data: displayData.map((item) => item.name),
+      axisLabel: {
+        rotate: 45,
+        interval: 0,
+      },
+    },
+    yAxis: [
+      {
+        type: "value",
+        name: "活动数",
+        position: "left",
+      },
+      {
+        type: "value",
+        name: "积分",
+        position: "right",
+      },
+    ],
+    series: [
+      {
+        name: "总活动数",
+        type: "bar",
+        data: displayData.map((item) => item.totalActivities),
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#667eea" },
+            { offset: 1, color: "#764ba2" },
+          ]),
+        },
+      },
+      {
+        name: "参与活动数",
+        type: "bar",
+        data: displayData.map((item) => item.attendedActivities),
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#f093fb" },
+            { offset: 1, color: "#f5576c" },
+          ]),
+        },
+      },
+      {
+        name: "总积分",
+        type: "line",
+        yAxisIndex: 1,
+        data: displayData.map((item) => item.totalPoints?.toFixed(1) || 0),
+        itemStyle: {
+          color: "#ffd93d",
+        },
+        lineStyle: {
+          width: 3,
+        },
+        symbol: "circle",
+        symbolSize: 8,
+      },
+    ],
+  };
+  studentActivityChart.setOption(option);
+};
+
+// 初始化活动参与率统计图表
+const initParticipationRateChart = () => {
+  if (!participationRateChartRef.value || activityParticipationList.value.length === 0) return;
+
+  if (participationRateChart) {
+    participationRateChart.dispose();
+  }
+
+  // 只显示前10个活动，避免图表过于拥挤
+  const displayData = activityParticipationList.value.slice(0, 10);
+
+  participationRateChart = echarts.init(participationRateChartRef.value);
+  const option: echarts.EChartsOption = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+      formatter: (params: unknown) => {
+        const param = (params as Array<{ dataIndex: number }>)[0];
+        if (!param) return "";
+        const data = displayData[param.dataIndex];
+        if (!data) return "";
+        return `
+          <div style="margin-bottom: 8px; font-weight: 600;">${data.title}</div>
+          <div>社团: ${data.clubName}</div>
+          <div>最大参与数: ${data.maxParticipants}</div>
+          <div>已报名数: ${data.registeredCount}</div>
+          <div>参与率: ${data.participationRate?.toFixed(1) || 0}%</div>
+        `;
+      },
+    },
+    legend: {
+      data: ["参与率"],
+      top: 10,
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "15%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "category",
+      data: displayData.map((item) => item.title.length > 15 ? item.title.substring(0, 15) + "..." : item.title),
+      axisLabel: {
+        rotate: 45,
+        interval: 0,
+      },
+    },
+    yAxis: {
+      type: "value",
+      name: "参与率 (%)",
+      max: 100,
+    },
+    series: [
+      {
+        name: "参与率",
+        type: "bar",
+        data: displayData.map((item) => item.participationRate?.toFixed(1) || 0),
+        itemStyle: {
+          color: (params: { dataIndex: number }) => {
+            const data = displayData[params.dataIndex];
+            if (!data) return "#cccccc";
+            const rate = data.participationRate;
+            if (rate >= 80) {
+              return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#06d6a0" },
+                { offset: 1, color: "#118ab2" },
+              ]);
+            } else if (rate >= 50) {
+              return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#ffd93d" },
+                { offset: 1, color: "#ffa500" },
+              ]);
+            } else {
+              return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#ff6b6b" },
+                { offset: 1, color: "#c92a2a" },
+              ]);
+            }
+          },
+        },
+        label: {
+          show: true,
+          position: "top",
+          formatter: "{c}%",
+        },
+      },
+    ],
+  };
+  participationRateChart.setOption(option);
 };
 </script>
 <style scoped>
@@ -432,6 +626,7 @@ const fetchStatistics = async () => {
 }
 
 .statistics-card {
+  overflow: hidden;
   width: 100%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: saturate(180%) blur(20px);
@@ -452,6 +647,17 @@ const fetchStatistics = async () => {
 .statistics-content {
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.chart-container {
+  width: 100%;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 400px;
+  min-height: 400px;
 }
 
 .dashboard-section {
