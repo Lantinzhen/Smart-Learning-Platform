@@ -1,7 +1,8 @@
 <template>
   <div class="activity-detail">
     <!-- 返回活动列表 按钮 -->
-    <el-button type="primary" @click="goBack()">
+    <el-button type="primary"
+               @click="goBack()">
       返回活动列表
     </el-button>
     <div class="detail-header">
@@ -9,12 +10,14 @@
     </div>
 
     <!-- 活动详情 内容 -->
-    <div class="detail-content" v-if="activityDetail">
+    <div class="detail-content"
+         v-if="activityDetail">
       <el-card>
         <div class="content-header">
           <!-- 活动标题 -->
           <h1> {{ activityDetail.title }}</h1>
-          <el-tag :type="getStatusTagType(activityDetail.status)" size="small">{{ activityDetail.status }}</el-tag>
+          <el-tag :type="getStatusTagType(activityDetail.status)"
+                  size="small">{{ activityDetail.status }}</el-tag>
         </div>
         <!-- 活动信息 -->
         <div class="activity-info">
@@ -63,27 +66,41 @@
           <div class="info-label">活动海报</div>
           <!-- :src=activityDetail.posterUrl -->
           <!-- src="../../assets/logo.svg" -->
-          <img :src=activityDetail.posterUrl alt="活动海报" class="info-poster">
+          <img :src=activityDetail.posterUrl
+               alt="活动海报"
+               class="info-poster">
 
         </div>
       </el-card>
       <!-- 活动报名列表 -->
       <el-card>
         <div class="table-name">报名列表</div>
-        <el-table v-loading="loading" :data="ApplyMembers" style="width: 100%">
-          <el-table-column prop="registrationId" label="序号">
+        <el-table v-loading="loading"
+                  :data="ApplyMembers"
+                  style="width: 100%">
+          <el-table-column prop="registrationId"
+                           label="序号">
           </el-table-column>
-          <el-table-column prop="name" label="姓名">
+          <el-table-column prop="name"
+                           label="姓名">
           </el-table-column>
-          <el-table-column prop="studentId" label="学号"></el-table-column>
-          <el-table-column prop="major" label="专业"></el-table-column>
-          <el-table-column prop="registrationTime" label="报名时间"></el-table-column>
+          <el-table-column prop="studentId"
+                           label="学号"></el-table-column>
+          <el-table-column prop="major"
+                           label="专业"></el-table-column>
+          <el-table-column prop="registrationTime"
+                           label="报名时间"></el-table-column>
 
         </el-table>
         <!-- 分页 -->
-        <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[1, 2, 5, 10]"
-          layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" class="pagination" />
+        <el-pagination :current-page="currentPage"
+                       :page-size="pageSize"
+                       :page-sizes="[1, 2, 5, 10]"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total="total"
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       class="pagination" />
 
       </el-card>
       <!-- <div class="send-points"
@@ -102,7 +119,10 @@
 import { onMounted, ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useActivityStore } from "../../../stores/activity";
-import type { ActivityDetail, ActivityEnrollItem } from "../../../types/activity";
+import type {
+  ActivityDetail,
+  ActivityEnrollItem,
+} from "../../../types/activity";
 import { getStatusTagType } from "../../../utils/map";
 import { formatIsoTime } from "../../../utils/format";
 import { ElMessage } from "element-plus";

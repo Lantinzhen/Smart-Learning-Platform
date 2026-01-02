@@ -3,24 +3,6 @@
     <div class="member-header">
       <h1>{{ club_name }} 成员管理</h1>
     </div>
-    <!-- 数据卡片统计 -->
-    <!-- <div class="stats-cards">
-      单独小卡片
-      <el-card class="stat-card"
-               v-for="card in cards"
-               :key="card.title">
-        <div class="stat-content">
-          <div class="stat-icon">
-            <el-avatar :size="40"
-                       style="background: rgba(255,255,255,0.2)" />
-          </div>
-          <div class="stat-info">
-            <p class="stat-label">{{card.title}}</p>
-            <p class="stat-value">{{card.value}}</p>
-          </div>
-        </div>
-      </el-card>
-    </div> -->
 
     <DataCard :cards="cards" />
     <!-- 成员列表 -->
@@ -42,6 +24,9 @@
                      :label="item.label"
                      :value="item.value" />
         </el-select>
+        <!-- 导出成员列表 -->
+        <button class="export-member"
+                @click="exportMemberList">导出成员列表</button>
 
       </div>
       <el-table v-loading="loading"
@@ -171,6 +156,7 @@ import { formatIsoTime } from "../../utils/format";
 import { pa, tr } from "element-plus/es/locales.mjs";
 import DataCard from "../../components/DataCard.vue";
 import { useDashboardStore } from "../../stores/dashboard";
+import { convertToCSV, downloadCSV } from "../../utils/csv";
 const club_name = localStorage.getItem("club_name");
 
 // 获取store
@@ -401,6 +387,36 @@ const handleCurrentChange = (newCurrentPage: number) => {
   // 切换页码后重新请求数据
   fetchMemberList();
 };
+
+// 导出成员列表功能
+const exportMemberList = () => {
+  // 筛选出当前筛选条件下的成员
+  const filteredMembers = memberList.value;
+
+  // 如果没有成员可导出，给出提示
+  if (filteredMembers.length === 0) {
+    ElMessage.info("暂无成员可导出");
+    return;
+  }
+
+  // 准备导出数据，只包含姓名、学号和专业
+  const exportData = filteredMembers.map((member) => ({
+    姓名: member.name,
+    学号: member.studentId,
+    专业: member.major,
+  }));
+
+  // 将数据转换为CSV格式
+  const csvContent = convertToCSV(exportData);
+
+  // 下载CSV文件
+  downloadCSV(
+    csvContent,
+    `${club_name}_成员列表_${new Date().toISOString().slice(0, 10)}.csv`
+  );
+
+  ElMessage.success("成员列表导出成功");
+};
 </script>
 <style scoped>
 .member-container {
@@ -423,6 +439,25 @@ const handleCurrentChange = (newCurrentPage: number) => {
 }
 .status-filter {
   width: 150px;
+}
+
+.export-member {
+  padding: 4px 10px;
+  color: #fff;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #00c9a7, #ffd166);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 201, 167, 0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.export-member:hover {
+  background: linear-gradient(135deg, #00a88c, #e6bc5c);
+  box-shadow: 0 4px 12px rgba(0, 201, 167, 0.4);
+}
+.export-member:active {
+  background: linear-gradient(135deg, #008c6b, #e6b04c);
+  box-shadow: 0 2px 8px rgba(0, 201, 167, 0.5);
 }
 
 /* 暗色模式 */

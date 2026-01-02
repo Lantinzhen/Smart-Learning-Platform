@@ -31,6 +31,8 @@
                   @click="showCreateActivity = true">+ 添加活动</button>
           <button class="filter-select"
                   @click="clearFilter()">清空筛选</button>
+          <button class="export-button"
+                  @click="exportApprovedActivities">导出活动列表</button>
         </div>
 
         <div class="activity-list">
@@ -123,6 +125,11 @@
           <!-- 活动海报url -->
           <el-form-item label="活动海报url"
                         prop="poster_url">
+
+            <UpLoadIma v-if="!editorActivity"
+                       :fileName="activityForm.title"
+                       @receivedUrl="handleUrlUpdate" />
+
             <el-input v-model="activityForm.poster_url"
                       placeholder="活动海报url"
                       :disabled="editorActivity" />
@@ -204,6 +211,9 @@ import type { FormInstance, FormRules } from "element-plus";
 import { ElMessage, ElMessageBox } from "element-plus";
 import type { ActivityForm, updateActivityForm } from "../../types/activity";
 import DataCard from "../../components/DataCard.vue";
+// import UploadComponent from "../../components/upload.vue";
+import UpLoadIma from "../../components/UpLoadImg.vue";
+import { convertToCSV, downloadCSV } from "../../utils/csv";
 
 // 路由
 const router = useRouter();
@@ -298,6 +308,38 @@ const clearFilter = () => {
   searchQuery.value = "";
 };
 
+// 添加导出活动列表的方法
+const exportApprovedActivities = () => {
+  // 筛选出已批准的活动
+  const approvedActivities = activityList.value.filter(
+    (activity) => activity.status === "已批准"
+  );
+
+  // 如果没有已批准的活动，给出提示
+  if (approvedActivities.length === 0) {
+    ElMessage.info("暂无已批准的活动可导出");
+    return;
+  }
+
+  // 准备导出数据，只包含名称、开始时间和地点
+  const exportData = approvedActivities.map((activity) => ({
+    名称: activity.title,
+    开始时间: formatIsoTime(activity.startTime),
+    地点: activity.location,
+  }));
+
+  // 将数据转换为CSV格式
+  const csvContent = convertToCSV(exportData);
+
+  // 下载CSV文件
+  downloadCSV(
+    csvContent,
+    `${club_name}_已批准活动列表_${new Date().toISOString().slice(0, 10)}.csv`
+  );
+
+  ElMessage.success("活动列表导出成功");
+};
+
 onMounted(async () => {
   fetchActivityList();
 });
@@ -331,6 +373,11 @@ const activityForm = ref<ActivityForm>({
   registration_deadline: "",
 });
 
+const handleUrlUpdate = (url: string) => {
+  activityForm.value.poster_url = "";
+  ElMessage.success("活动海报上传成功");
+  activityForm.value.poster_url = url;
+};
 // 活动表单验证规则
 const activityRules = ref<FormRules>({
   // 活动名称
@@ -596,8 +643,26 @@ const goActivityDetail = (id: number) => {
   box-shadow: 0 4px 12px rgba(255, 209, 102, 0.4);
 }
 .filter-select:active {
-  background: linear-gradient(135deg, #e6bc5c, #e69500);
+  background: linear-gradient(135deg, #cea953, #d28902);
   box-shadow: 0 4px 12px rgba(255, 209, 102, 0.5);
+}
+.export-button {
+  padding: 4px 10px;
+  color: #fff;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #06d6a0, #118ab2);
+  border: none;
+  box-shadow: 0 2px 8px rgba(6, 214, 160, 0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.export-button:hover {
+  background: linear-gradient(135deg, #05b48a, #0e7490);
+  box-shadow: 0 4px 12px rgba(6, 214, 160, 0.4);
+}
+.export-button:active {
+  background: linear-gradient(135deg, #059f7b, #0d657d);
+  box-shadow: 0 4px 12px rgba(6, 214, 160, 0.5);
 }
 .activity-list {
   display: flex;

@@ -73,7 +73,12 @@
       </el-card>
       <!-- 活动报名列表 -->
       <el-card>
-        <div class="table-name">报名列表</div>
+        <div class="header">
+          <div class="table-name">参加列表</div>
+          <button class="export-attend-list"
+                  @click="exportAttendList">导出成员列表</button>
+        </div>
+
         <el-table v-loading="loading"
                   :data="ApplyMembers"
                   style="width: 100%">
@@ -122,6 +127,7 @@ import type { ActivityDetail, ActivityEnrollItem } from "../../types/activity";
 import { getStatusTagType } from "../../utils/map";
 import { formatIsoTime } from "../../utils/format";
 import { ElMessage } from "element-plus";
+import { convertToCSV, downloadCSV } from "../../utils/csv";
 
 const router = useRouter();
 const route = useRoute();
@@ -226,6 +232,38 @@ const goBack = () => {
   // router.push({ path: "/activity" });
   history.back();
 };
+
+// 导出参加成员列表功能
+const exportAttendList = async () => {
+  // 获取当前活动的报名列表
+  const members = ApplyMembers.value;
+
+  // 如果没有成员可导出，给出提示
+  if (members.length === 0) {
+    ElMessage.info("暂无成员可导出");
+    return;
+  }
+
+  // 准备导出数据，只包含姓名、学号和专业
+  const exportData = members.map((member, index) => ({
+    序号: index + 1, // 从1开始的序号
+    姓名: member.name,
+    学号: member.studentId,
+    专业: member.major,
+  }));
+
+  // 将数据转换为CSV格式
+  const csvContent = convertToCSV(exportData);
+
+  // 下载CSV文件
+  downloadCSV(
+    csvContent,
+    `${activityDetail.value?.title}_参加成员列表_${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`
+  );
+  ElMessage.success("参加成员列表导出成功");
+};
 </script>
 
 <style scoped>
@@ -261,8 +299,9 @@ const goBack = () => {
   color: #333;
 }
 .info-poster {
-  max-width: 50%;
-  max-height: 50%;
+  max-width: 500px;
+  max-height: 300px;
+  /* max-height: 50%; */
 }
 .pagination {
   margin-top: 20px;
@@ -272,7 +311,35 @@ const goBack = () => {
   align-items: center;
   justify-content: center;
 }
-
+.activity-description {
+  max-width: 100%;
+}
+.header {
+  display: flex;
+  align-items: center;
+}
+.table-name {
+  margin-left: 10px;
+}
+.export-attend-list {
+  margin-left: 10px;
+  padding: 4px 10px;
+  color: #fff;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #00c9a7, #ffd166);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 201, 167, 0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.export-attend-list:hover {
+  background: linear-gradient(135deg, #00a88c, #e6bc5c);
+  box-shadow: 0 4px 12px rgba(0, 201, 167, 0.4);
+}
+.export-attend-list:active {
+  background: linear-gradient(135deg, #008c6b, #e6b04c);
+  box-shadow: 0 2px 8px rgba(0, 201, 167, 0.5);
+}
 /* 暗色模式 */
 [data-theme="dark"] .el-card {
   background-color: #303133;
