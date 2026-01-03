@@ -511,14 +511,14 @@ const submitCategory = async () => {
   border-radius: 16px;
   border: 0.5px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
-              0 1px 2px rgba(0, 0, 0, 0.04);
+    0 1px 2px rgba(0, 0, 0, 0.04);
   padding: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .activity-list-card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
-              0 2px 4px rgba(0, 0, 0, 0.06);
+    0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .search-filters {
