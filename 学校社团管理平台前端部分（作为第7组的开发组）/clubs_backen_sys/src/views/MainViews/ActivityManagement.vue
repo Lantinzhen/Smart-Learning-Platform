@@ -449,6 +449,20 @@ const handleClose = () => {
     .then(() => {
       ElMessage.success("关闭成功");
       showCreateActivity.value = false;
+      editorActivity.value = false;
+      editorActivity.value = false;
+      activityForm.value = {
+        title: "",
+        category_id: 1,
+        description: "",
+        poster_url: "",
+        location: "",
+        start_time: "",
+        end_time: "",
+        max_participants: 100,
+        points: 0.1,
+        registration_deadline: "",
+      };
     })
     .catch(() => {
       ElMessage.info("已取消");
@@ -510,6 +524,20 @@ const handleCancel = async () => {
     .then(() => {
       ElMessage.success("取消成功");
       showCreateActivity.value = false;
+      //重置为新建模式
+      editorActivity.value = false;
+      activityForm.value = {
+        title: "",
+        category_id: 1,
+        description: "",
+        poster_url: "",
+        location: "",
+        start_time: "",
+        end_time: "",
+        max_participants: 100,
+        points: 0.1,
+        registration_deadline: "",
+      };
     })
     .catch(() => {
       ElMessage.info("已取消");
